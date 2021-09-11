@@ -1,8 +1,8 @@
 mod distance;
 
 fn main() {
-    let s1 = String::from("Hello");
-    let s2 = String::from("Helol");
+    let s1 = String::from("testtesttesttest");
+    let s2 = String::from("restrestrestrest");
 
     println!(
         "Distance between {} and {} is {}",

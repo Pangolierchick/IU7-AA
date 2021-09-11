@@ -2,14 +2,14 @@ pub fn levenstein_rec(s1: &str, s2: &str) -> usize {
     return _levenstein(&s1.to_ascii_lowercase(), &s2.to_ascii_lowercase());
 }
 
-fn _levenstein(s1: &str, s2: &str) -> usize {
+pub fn _levenstein(s1: &str, s2: &str) -> usize {
     if s1.len() == 0 {
         return s2.len();
     }
 
     if s2.len() == 0 {
         return s1.len();
-    }
+    }   
 
     if s1.chars().nth(0) == s2.chars().nth(0) {
         return _levenstein(&s1[1..], &s2[1..]);

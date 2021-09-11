@@ -14,25 +14,33 @@ feugiat ex. Praesent tincidunt semper libero. Mauris finibus nec quam
 */
 
 fn levenstein_rec_bench(c: &mut Criterion) {
-    c.bench_function("Lev. recursive", |b| {
-        b.iter(|| distance::levenstein_rec(TEST_STRING1, TEST_STRING2))
+    let mut group = c.benchmark_group("Distance");
+
+    group.bench_function("Lev. recursive", move |b| {
+        b.iter(|| distance::levenstein_rec(TEST_STRING3, TEST_STRING4))
     });
 }
 
 fn levenstein_iter_bench(c: &mut Criterion) {
-    c.bench_function("Lev. iteration", |b| {
-        b.iter(|| distance::levenstein_iter(TEST_STRING1, TEST_STRING2))
+    let mut group = c.benchmark_group("Distance");
+
+    group.bench_function("Lev. iteration", move |b| {
+        b.iter(|| distance::levenstein_iter(TEST_STRING3, TEST_STRING4))
     });
 }
 
 fn damerlau_levenstein_rec_bench(c: &mut Criterion) {
-    c.bench_function("Damerlau-Lev. recursive", |b| {
-        b.iter(|| distance::_damerlau_levenstein_rec(TEST_STRING1, TEST_STRING2))
+    let mut group = c.benchmark_group("Distance");
+
+    group.bench_function("Damerlau-Lev. recursive", move |b| {
+        b.iter(|| distance::_damerlau_levenstein_rec(TEST_STRING3, TEST_STRING4))
     });
 }
 
 fn damerlau_levenstein_iter_bench(c: &mut Criterion) {
-    c.bench_function("Damerlau-Lev. iteration", |b| {
+    let mut group = c.benchmark_group("Distance");
+
+    group.bench_function("Damerlau-Lev. iteration", move |b| {
         b.iter(|| distance::damerlau_levenstein_iter(TEST_STRING1, TEST_STRING2))
     });
 }
