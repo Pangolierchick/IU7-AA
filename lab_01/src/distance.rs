@@ -1,47 +1,49 @@
 pub fn levenstein_rec(s1: &str, s2: &str) -> usize {
-    return _levenstein(&s1.to_ascii_lowercase(), &s2.to_ascii_lowercase());
-}
+    let s1_len = s1.len();
+    let s2_len = s2.len();
 
-pub fn _levenstein(s1: &str, s2: &str) -> usize {
-    if s1.len() == 0 {
-        return s2.len();
+    if s1_len == 0 {
+        return s2_len;
     }
 
-    if s2.len() == 0 {
-        return s1.len();
+    if s2_len == 0 {
+        return s1_len;
     }   
 
     if s1.chars().nth(0) == s2.chars().nth(0) {
-        return _levenstein(&s1[1..], &s2[1..]);
+        return levenstein_rec(&s1[1..], &s2[1..]);
     }
 
-    let a = _levenstein(&s1[1..], &s2[1..]);
-    let b = _levenstein(s1, &s2[1..]);
-    let c = _levenstein(&s1[1..], &s2);
+    let a = levenstein_rec(&s1[1..], &s2[1..]);
+    let b = levenstein_rec(s1, &s2[1..]);
+    let c = levenstein_rec(&s1[1..], &s2);
 
     return std::cmp::min(a, std::cmp::min(b, c)) + 1;
 }
 
-pub fn _damerlau_levenstein_rec(s1: &str, s2: &str) -> usize {
-    if s1.len() == 0 {
-        return s2.len();
+pub fn damerlau_levenstein_rec(s1: &str, s2: &str) -> usize {
+    let s1_len = s1.len();
+    let s2_len = s2.len();
+
+    if s1_len == 0 {
+        return s2_len;
     }
 
-    if s2.len() == 0 {
-        return s1.len();
-    }
+    if s2_len == 0 {
+        return s1_len;
+    }   
 
     if s1.chars().nth(0) == s2.chars().nth(0) {
-        return _damerlau_levenstein_rec(&s1[1..], &s2[1..]);
+        return damerlau_levenstein_rec(&s1[1..], &s2[1..]);
     }
 
-    let a = _damerlau_levenstein_rec(&s1[1..], &s2[1..]);
-    let b = _damerlau_levenstein_rec(s1, &s2[1..]);
-    let c = _damerlau_levenstein_rec(&s1[1..], &s2);
+    let a = damerlau_levenstein_rec(&s1[1..], &s2[1..]);
+    let b = damerlau_levenstein_rec(s1, &s2[1..]);
+    let c = damerlau_levenstein_rec(&s1[1..], &s2);
 
     let mut d = usize::MAX;
-    if s1.len() > 1 && s2.len() > 1 {
-        d = _damerlau_levenstein_rec(&s1[2..], &s2[2..]);
+    if s1_len > 1 && s2_len > 1 {
+        d = damerlau_levenstein_rec(&s1[2..], &s2[2..]) + 1;
     }
 
     return std::cmp::min(d, std::cmp::min(a, std::cmp::min(b, c))) + 1;

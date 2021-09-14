@@ -5,8 +5,8 @@ mod distance;
 static TEST_STRING1: &str = "test";
 static TEST_STRING2: &str = "rest";
 
-static TEST_STRING3: &str = "testtesttesttest";
-static TEST_STRING4: &str = "restrestrestrest";
+static TEST_STRING3: &str = "ttttttttt";
+static TEST_STRING4: &str = "aaaaaaaaa";
 
 /*
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur.
@@ -33,7 +33,7 @@ fn damerlau_levenstein_rec_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
     group.bench_function("Damerlau-Lev. recursive", move |b| {
-        b.iter(|| distance::_damerlau_levenstein_rec(TEST_STRING3, TEST_STRING4))
+        b.iter(|| distance::damerlau_levenstein_rec(TEST_STRING3, TEST_STRING4))
     });
 }
 
