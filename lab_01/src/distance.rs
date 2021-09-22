@@ -21,7 +21,7 @@ pub fn levenstein_rec(s1: &str, s2: &str) -> usize {
     return std::cmp::min(a, std::cmp::min(b, c)) + 1;
 }
 
-pub fn damerlau_levenstein_rec(s1: &str, s2: &str) -> usize {
+pub fn damerau_levenstein_rec(s1: &str, s2: &str) -> usize {
     let s1_len = s1.len();
     let s2_len = s2.len();
 
@@ -34,16 +34,16 @@ pub fn damerlau_levenstein_rec(s1: &str, s2: &str) -> usize {
     }   
 
     if s1.chars().nth(0) == s2.chars().nth(0) {
-        return damerlau_levenstein_rec(&s1[1..], &s2[1..]);
+        return damerau_levenstein_rec(&s1[1..], &s2[1..]);
     }
 
-    let a = damerlau_levenstein_rec(&s1[1..], &s2[1..]);
-    let b = damerlau_levenstein_rec(s1, &s2[1..]);
-    let c = damerlau_levenstein_rec(&s1[1..], &s2);
+    let a = damerau_levenstein_rec(&s1[1..], &s2[1..]);
+    let b = damerau_levenstein_rec(s1, &s2[1..]);
+    let c = damerau_levenstein_rec(&s1[1..], &s2);
 
     let mut d = usize::MAX;
     if s1_len > 1 && s2_len > 1 {
-        d = damerlau_levenstein_rec(&s1[2..], &s2[2..]) + 1;
+        d = damerau_levenstein_rec(&s1[2..], &s2[2..]);
     }
 
     return std::cmp::min(d, std::cmp::min(a, std::cmp::min(b, c))) + 1;
@@ -82,7 +82,7 @@ pub fn levenstein_iter(word1: &str, word2: &str) -> usize {
     return matrix[word2_length - 1][word1_length - 1];
 }
 
-pub fn damerlau_levenstein_iter(word1: &str, word2: &str) -> usize {
+pub fn damerau_levenstein_iter(word1: &str, word2: &str) -> usize {
     // getting length of words
     let w1 = word1.chars().collect::<Vec<_>>();
     let w2 = word2.chars().collect::<Vec<_>>();

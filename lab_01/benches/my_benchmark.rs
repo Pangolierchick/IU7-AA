@@ -29,19 +29,19 @@ fn levenstein_iter_bench(c: &mut Criterion) {
     });
 }
 
-fn damerlau_levenstein_rec_bench(c: &mut Criterion) {
+fn damerau_levenstein_rec_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
-    group.bench_function("Damerlau-Lev. recursive", move |b| {
-        b.iter(|| distance::damerlau_levenstein_rec(TEST_STRING3, TEST_STRING4))
+    group.bench_function("Damerau-Lev. recursive", move |b| {
+        b.iter(|| distance::damerau_levenstein_rec(TEST_STRING3, TEST_STRING4))
     });
 }
 
-fn damerlau_levenstein_iter_bench(c: &mut Criterion) {
+fn damerau_levenstein_iter_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
-    group.bench_function("Damerlau-Lev. iteration", move |b| {
-        b.iter(|| distance::damerlau_levenstein_iter(TEST_STRING1, TEST_STRING2))
+    group.bench_function("Damerau-Lev. iteration", move |b| {
+        b.iter(|| distance::damerau_levenstein_iter(TEST_STRING1, TEST_STRING2))
     });
 }
 
@@ -49,7 +49,7 @@ criterion_group!(
     benches,
     levenstein_rec_bench,
     levenstein_iter_bench,
-    damerlau_levenstein_rec_bench,
-    damerlau_levenstein_iter_bench
+    damerau_levenstein_rec_bench,
+    damerau_levenstein_iter_bench
 );
 criterion_main!(benches);
