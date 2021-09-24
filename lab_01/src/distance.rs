@@ -1,3 +1,55 @@
+fn _levenstein_mem_rec(s1: &Vec<char>, s2: &Vec<char>, i: usize, j: usize, matrix: & mut Vec<Vec<usize>>) -> usize {
+    if matrix[i][j] != usize::MAX {
+        return matrix[i][j];
+    }
+
+    if i == 0 {
+        matrix[i][j] = j;
+        return matrix[i][j];
+    }
+
+    if j == 0 && i > 0 {
+        matrix[i][j] = i;
+        return matrix[i][j];
+    }
+
+    let mut eq = 1;
+
+    if s1[i - 1] == s2[j - 1] {
+        eq = 0;
+    }
+
+    matrix[i][j] = std::cmp::min(
+        _levenstein_mem_rec(s1, s2, i, j - 1, matrix) + 1,
+        std::cmp::min(
+            _levenstein_mem_rec(s1, s2, i - 1, j, matrix) + 1,
+            _levenstein_mem_rec(s1, s2, i - 1, j - 1, matrix) + eq
+        )
+    );
+
+    return matrix[i][j];
+}
+
+pub fn levenstein_mem_rec(s1: &str, s2: &str) -> usize {
+    let w1 = s1.chars().collect::<Vec<_>>();
+    let w2 = s2.chars().collect::<Vec<_>>();
+
+    let word1_length = w1.len();
+    let word2_length = w2.len();
+
+    let mut matrix = vec![vec![0; word1_length + 1]; word2_length + 1];
+
+    for i in 0..word1_length + 1 {
+        for j in 0..word2_length + 1 {
+            matrix[i][j] = usize::MAX;
+        }
+    }
+
+    _levenstein_mem_rec(&w1, &w2, word1_length, word2_length, &mut matrix);
+
+    return matrix[word1_length][word2_length];
+}
+
 pub fn levenstein_rec(s1: &str, s2: &str) -> usize {
     let s1_len = s1.len();
     let s2_len = s2.len();

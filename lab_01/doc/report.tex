@@ -227,9 +227,23 @@ escapeinside={\#*}{*)}   % если нужно добавить коммента
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.9]{dam_lev_rec.png}
+	\includegraphics[scale=0.85]{dam_lev_rec.png}
 	\caption{Схема рекурсивного алгоритма нахождения расстояния Дамерау-Левенштейна}
 	\label{fig:rec_dam_lev}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{lev_cache_main.png}
+	\caption{Схема рекурсивного алгоритма нахождения расстояния Левенштейна с кэшем}
+	\label{fig:rec_lev_cache_main}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.85]{lev_cache_aux.png}
+	\caption{Схема подпрограммы алгоритмы нахождения расстояния Левенштейна с кэшем}
+	\label{fig:rec_lev_cache_aux}
 \end{figure}
 
 \begin{figure}[h]
@@ -338,6 +352,62 @@ pub fn damerau_levenstein_rec(s1: &str, s2: &str) -> usize {
 	return std::cmp::min(d, std::cmp::min(a, std::cmp::min(b, c))) + 1;
 }
 
+\end{lstlisting}
+
+\clearpage
+
+\begin{lstlisting}[label=some-code,caption=Функция нахождения расстояния Левенштейна рекурсивно с кэшем]
+fn _levenstein_mem_rec(s1: &Vec<char>, s2: &Vec<char>, i: usize, j: usize, matrix: & mut Vec<Vec<usize>>) -> usize {
+    if matrix[i][j] != usize::MAX {
+        return matrix[i][j];
+    }
+
+    if i == 0 {
+        matrix[i][j] = j;
+        return matrix[i][j];
+    }
+
+    if j == 0 && i > 0 {
+        matrix[i][j] = i;
+        return matrix[i][j];
+    }
+
+    let mut eq = 1;
+
+    if s1[i - 1] == s2[j - 1] {
+        eq = 0;
+    }
+
+    matrix[i][j] = std::cmp::min(
+        _levenstein_mem_rec(s1, s2, i, j - 1, matrix) + 1,
+        std::cmp::min(
+            _levenstein_mem_rec(s1, s2, i - 1, j, matrix) + 1,
+            _levenstein_mem_rec(s1, s2, i - 1, j - 1, matrix) + eq
+        )
+    );
+
+    return matrix[i][j];
+}
+
+pub fn levenstein_mem_rec(s1: &str, s2: &str) -> usize {
+    let w1 = s1.chars().collect::<Vec<_>>();
+    let w2 = s2.chars().collect::<Vec<_>>();
+
+    let word1_length = w1.len();
+    let word2_length = w2.len();
+
+    let mut matrix = vec![vec![0; word1_length + 1]; word2_length + 1];
+
+    for i in 0..word1_length + 1 {
+        for j in 0..word2_length + 1 {
+            matrix[i][j] = usize::MAX;
+        }
+    }
+
+    _levenstein_mem_rec(&w1, &w2, word1_length, word2_length, &mut matrix);
+
+    return matrix[word1_length][word2_length];
+}
 \end{lstlisting}
 
 \newpage
@@ -453,30 +523,32 @@ pub fn damerau_levenstein_iter(word1: &str, word2: &str) -> usize {
 	Замер времени был выполнен со строками одинаковой длины. Длина строки ~--~ количество символов, содержащихся в этой строке.
 	
 	\begin{table}[h]
-	\centering
-	\begin{tabular}{ccccc}
-	\multicolumn{1}{l}{Длина строк} &
-	  \multicolumn{1}{l}{Лев. рек.} &
-	  \multicolumn{1}{l}{Лев. итер.} &
-	  \multicolumn{1}{l}{Дам. -Лев. рек.} &
-	  \multicolumn{1}{l}{Дам. -Лев. итер.} \\ \hline
-	\multicolumn{1}{|c|}{1} & \multicolumn{1}{c|}{8,50E-08} & \multicolumn{1}{c|}{2,48E-07} & \multicolumn{1}{c|}{3,20E-10} & \multicolumn{1}{c|}{5,50E-07} \\ \hline
-	\multicolumn{1}{|c|}{2} & \multicolumn{1}{c|}{1,08E-07} & \multicolumn{1}{c|}{3,07E-07} & \multicolumn{1}{c|}{4,80E-08} & \multicolumn{1}{c|}{4,93E-07} \\ \hline
-	\multicolumn{1}{|c|}{3} & \multicolumn{1}{c|}{3,20E-07} & \multicolumn{1}{c|}{4,26E-07} & \multicolumn{1}{c|}{2,77E-07} & \multicolumn{1}{c|}{4,91E-07} \\ \hline
-	\multicolumn{1}{|c|}{4} & \multicolumn{1}{c|}{1,30E-06} & \multicolumn{1}{c|}{4,88E-07} & \multicolumn{1}{c|}{1,50E-06} & \multicolumn{1}{c|}{5,00E-07} \\ \hline
-	\multicolumn{1}{|c|}{5} & \multicolumn{1}{c|}{6,90E-06} & \multicolumn{1}{c|}{7,41E-07} & \multicolumn{1}{c|}{8,40E-06} & \multicolumn{1}{c|}{5,08E-07} \\ \hline
-	\multicolumn{1}{|c|}{6} & \multicolumn{1}{c|}{3,65E-05} & \multicolumn{1}{c|}{8,12E-07} & \multicolumn{1}{c|}{4,68E-05} & \multicolumn{1}{c|}{5,31E-07} \\ \hline
-	\multicolumn{1}{|c|}{7} & \multicolumn{1}{c|}{1,97E-04} & \multicolumn{1}{c|}{9,86E-07} & \multicolumn{1}{c|}{2,64E-04} & \multicolumn{1}{c|}{5,14E-07} \\ \hline
-	\multicolumn{1}{|c|}{8} & \multicolumn{1}{c|}{1,00E-03} & \multicolumn{1}{c|}{1,10E-06} & \multicolumn{1}{c|}{1,51E-03} & \multicolumn{1}{c|}{5,20E-07} \\ \hline
-	\multicolumn{1}{|c|}{9} & \multicolumn{1}{c|}{5,92E-03} & \multicolumn{1}{c|}{1,22E-06} & \multicolumn{1}{c|}{8,72E-03} & \multicolumn{1}{c|}{5,09E-07} \\ \hline
-	\end{tabular}
-	\caption{Время работы алгоритмов (в секундах)}
-	\label{tab:bench}
-	\end{table}
+		\centering
+		\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{1}{|l|}{Длина слов} &
+		  \multicolumn{1}{l|}{Лев рек.} &
+		  \multicolumn{1}{l|}{Лев итер.} &
+		  \multicolumn{1}{l|}{Лев. рек. кэш} &
+		  \multicolumn{1}{l|}{Дам-Лев рек.} &
+		  \multicolumn{1}{l|}{Дам-Лев итер.} \\ \hline
+		1 & 8,50E-08 & 2,48E-07 & 2,58E-07 & 3,20E-10 & 5,50E-07 \\ \hline
+		2 & 1,08E-07 & 3,07E-07 & 3,63E-07 & 4,80E-08 & 4,93E-07 \\ \hline
+		3 & 3,20E-07 & 4,26E-07 & 4,95E-07 & 2,77E-07 & 4,91E-07 \\ \hline
+		4 & 1,30E-06 & 4,88E-07 & 6,46E-07 & 1,50E-06 & 5,00E-07 \\ \hline
+		5 & 6,90E-06 & 7,41E-07 & 9,02E-07 & 8,40E-06 & 5,08E-07 \\ \hline
+		6 & 3,65E-05 & 8,12E-07 & 1,00E-06 & 4,68E-05 & 5,31E-07 \\ \hline
+		7 & 1,97E-04 & 9,86E-07 & 1,26E-06 & 2,64E-04 & 5,14E-07 \\ \hline
+		8 & 1,00E-03 & 1,10E-06 & 1,47E-06 & 1,51E-03 & 5,20E-07 \\ \hline
+		9 & 5,92E-03 & 1,22E-06 & 1,71E-06 & 8,72E-03 & 5,09E-07 \\ \hline
+		\end{tabular}
+		\caption{Время работы алгоритмов (в секундах)}
+		\label{tab:bench}
+		\end{table}
 
 	\pagebreak
 
-	На рис. \ref{fig:plot} представлена зависимость времени работы алгоримтов от длины строк. На данном графике совпали графики реализаций алгоритмов Левенштейна итеративного и Дамерау-Левенштейна.
+	На рис. \ref{fig:plot} представлена зависимость времени работы реализаций алгоритмов от длины строк. Для удобства ось времени работы представлена в логарифмической шкале
 	
 	
 	\begin{figure}[ht]
@@ -501,7 +573,7 @@ pub fn damerau_levenstein_iter(word1: &str, word2: &str) -> usize {
 	\end{equation}
 	
 	\noindent
-	где Size - функция, возвращающая размер аргумента; string - строковый тип, int - целочисленный тип.
+	где Size - функция, возвращающая размер аргумента; string - строковый тип, usize - целочисленный, беззнаковый тип.
 
 	\par
 	Использование памяти при итеративной реализации теоритически равно
@@ -511,12 +583,19 @@ pub fn damerau_levenstein_iter(word1: &str, word2: &str) -> usize {
 	\end{equation}
 
 	\par
+	Использование памяти рекурсивной реализации алгоритма Левенштейна с кэшем теоритически равно
+
+	\begin{equation}
+		(Size(S_{1}) + Size(S_{2}) \cdot (2 \cdot Size(\text{string}) + 5 \cdot Size(\text{usize})) + (Size(S_{1} + 1) \cdot Size(S_{2} + 1)) \cdot Size(usize) )
+	\end{equation}
+
+	\par
 	В данный момент отсутствуют инструменты для замера потребления памяти для языка Rust, поэтому подробные и конкретные замеры невозможны.
 
 	\section{Вывод}
 
 	\par
-	Рекурсивный алгоритм Левенштейна работает на порядок дольше итеративных реализаций, время его работы увеличивается в геометрической прогрессии. На словах длиной 9 символов, матричная реализация превосходит рекурсивную в 4800 раз. Рекурсивные алгоритмы Левенштейна и Дамерау - Левенштейна сопостовимы по времени.
+	Рекурсивный алгоритм Левенштейна работает на порядок дольше итеративных реализаций, время его работы увеличивается в геометрической прогрессии. На словах длиной 9 символов, матричная реализация превосходит рекурсивную в 4800 раз. Рекурсивные алгоритмы Левенштейна и Дамерау - Левенштейна сопостовимы по времени. Однако, использование кэша значительно ускоряет рекурсивный алгоритм, но он все еще не превосходит матричную реализацию.
 
 	\chapter*{Заключение}
 

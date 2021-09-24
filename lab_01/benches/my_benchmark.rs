@@ -2,8 +2,8 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 #[path = "../src/distance.rs"]
 mod distance;
 
-static TEST_STRING1: &str = "test";
-static TEST_STRING2: &str = "rest";
+static TEST_STRING1: &str = "ttttttttt";
+static TEST_STRING2: &str = "aaaaaaaaa";
 
 static TEST_STRING3: &str = "ttttttttt";
 static TEST_STRING4: &str = "aaaaaaaaa";
@@ -17,7 +17,7 @@ fn levenstein_rec_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
     group.bench_function("Lev. recursive", move |b| {
-        b.iter(|| distance::levenstein_rec(TEST_STRING3, TEST_STRING4))
+        b.iter(|| distance::levenstein_rec(TEST_STRING1, TEST_STRING2))
     });
 }
 
@@ -25,7 +25,15 @@ fn levenstein_iter_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
     group.bench_function("Lev. iteration", move |b| {
-        b.iter(|| distance::levenstein_iter(TEST_STRING3, TEST_STRING4))
+        b.iter(|| distance::levenstein_iter(TEST_STRING1, TEST_STRING2))
+    });
+}
+
+fn levenstein_mem_rec_bench(c: &mut Criterion) {
+    let mut group = c.benchmark_group("Distance");
+
+    group.bench_function("Lev. mem. rec", move |b| {
+        b.iter(|| distance::levenstein_mem_rec(TEST_STRING1, TEST_STRING2))
     });
 }
 
@@ -33,7 +41,7 @@ fn damerau_levenstein_rec_bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Distance");
 
     group.bench_function("Damerau-Lev. recursive", move |b| {
-        b.iter(|| distance::damerau_levenstein_rec(TEST_STRING3, TEST_STRING4))
+        b.iter(|| distance::damerau_levenstein_rec(TEST_STRING1, TEST_STRING2))
     });
 }
 
@@ -47,9 +55,10 @@ fn damerau_levenstein_iter_bench(c: &mut Criterion) {
 
 criterion_group!(
     benches,
-    levenstein_rec_bench,
-    levenstein_iter_bench,
-    damerau_levenstein_rec_bench,
-    damerau_levenstein_iter_bench
+    // levenstein_rec_bench,
+    // levenstein_iter_bench,
+    levenstein_mem_rec_bench
+    // damerau_levenstein_rec_bench,
+    // damerau_levenstein_iter_bench
 );
 criterion_main!(benches);
