@@ -55,9 +55,9 @@ fn damerau_levenstein_iter_bench(c: &mut Criterion) {
 
 criterion_group!(
     benches,
-    // levenstein_rec_bench,
+    levenstein_rec_bench
     // levenstein_iter_bench,
-    levenstein_mem_rec_bench
+    // levenstein_mem_rec_bench
     // damerau_levenstein_rec_bench,
     // damerau_levenstein_iter_bench
 );
