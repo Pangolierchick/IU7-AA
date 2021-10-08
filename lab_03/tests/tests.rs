@@ -9,6 +9,36 @@ mod tests {
     }
 
     #[test]
+    fn empty_bubble() {
+        let mut testing : Vec<i32> = Vec::new();
+        let true_test   : Vec<i32> = Vec::new();
+
+        crate::sorts::bubble_sort(& mut testing);
+
+        assert_eq!(true, testing.len() == true_test.len());
+    }
+
+    #[test]
+    fn empty_insertion() {
+        let mut testing : Vec<i32> = Vec::new();
+        let true_test   : Vec<i32> = Vec::new();
+
+        crate::sorts::insertion_sort(& mut testing);
+
+        assert_eq!(true, testing.len() == true_test.len());
+    }
+
+    #[test]
+    fn empty_selection() {
+        let mut testing : Vec<i32> = Vec::new();
+        let true_test   : Vec<i32> = Vec::new();
+
+        crate::sorts::selection_sort(& mut testing);
+
+        assert_eq!(true, testing.len() == true_test.len());
+    }
+
+    #[test]
     fn bubble_sort_test1() {
         let mut testing   = vec![4, 3, 2, 1];
         let true_test = vec![1, 2, 3, 4];
