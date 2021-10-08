@@ -767,7 +767,7 @@ pub fn selection_sort<T: std::cmp::Ord>(v: &mut [T]) {
 	
 	Был проведен замер времени работы каждого из алгоритмов с помощью библиотеки Criterion [3]. Эта библиотека замеряет процессорное время выполнения функции и усредняет его.
 
-    \begin{table}[]
+    \begin{table}[htb]
         \caption{\centering Результаты времени выполнения алгоритмов сортировок на отсортированном массиве (в секундах)}
         \centering
         \begin{tabular}{|c|c|c|c|}
@@ -824,7 +824,7 @@ pub fn selection_sort<T: std::cmp::Ord>(v: &mut [T]) {
     \caption{График времени выполнения алгоритмов при отсортированном массиве}
     \end{figure}
 
-    \begin{table}[]
+    \begin{table}[htb]
         \caption{\centering Результаты времени выполнения алгоритмов сортировок на отсортированном в обратном порядке массиве (в секундах)}
         \centering
         \begin{tabular}{|c|c|c|c|}
@@ -881,7 +881,7 @@ pub fn selection_sort<T: std::cmp::Ord>(v: &mut [T]) {
     \caption{График времени выполнения алгоритмов при отсортированном в обратном порядке массиве}
     \end{figure}
 
-    \begin{table}[]
+    \begin{table}[htb]
         \caption{\centering Результаты времени выполнения алгоритмов сортировок на случайном массиве (в секундах)}
         \centering
         \begin{tabular}{|c|c|c|c|}
