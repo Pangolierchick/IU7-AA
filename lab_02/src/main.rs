@@ -1,15 +1,9 @@
-mod matrix;
-use std::convert::TryInto;
+pub mod matrix;
+
+extern crate num_traits;
 
 fn main() {
-    let mut m : matrix::Matrix<i32> = matrix::Matrix::new(5, 5);
-
-    for i in 0..m.rows {
-        for j in 0..m.col {
-            let v : i32 = (i + j).try_into().unwrap();
-            m.push(v);
-        }
-    }
+    let m : matrix::Matrix<i32> = matrix::Matrix::from(2, 3, &[1, 2, 3, 3, 2, 1]);
 
     println!("mat:\n{}", m);
 }

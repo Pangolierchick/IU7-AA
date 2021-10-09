@@ -1,15 +1,32 @@
-use std::ops;
 use std::fmt;
-
-pub struct Matrix<T> {
+use std::ops;
+pub struct Matrix<T : Default> {
     pub rows : usize,
     pub col  : usize,
     pub data : Vec<T>
 }
 
-impl<T> Matrix<T> {
+impl<T : Default + num_traits::Num + ops::AddAssign + Copy> Matrix<T> {
     pub fn new(r : usize, c : usize) -> Self {
         Self { rows : r, col : c, data: Vec::with_capacity(r * c) }
+    }
+
+    pub fn new_zero(r : usize, c : usize) -> Self {
+        let data : Vec<T> = vec![Default::default(); r * c];
+
+        Self { rows : r, col : c, data }
+    }
+
+    pub fn from(r : usize, c : usize, arr : &[T]) -> Self {
+        let mut out : Matrix<T> = Matrix::new_zero(r, c);
+
+        for i in 0..r {
+            for j in 0..c {
+                out[[i, j]] = arr[i * c + j];
+            }
+        }
+
+        out
     }
 
     pub fn get(&self, i : usize, j : usize) -> &T {
@@ -23,9 +40,27 @@ impl<T> Matrix<T> {
     pub fn push(& mut self, v : T) {
         self.data.push(v);
     }
+
+    pub fn default_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
+        if m1.col != m2.rows {
+            return Err("The number of columns must be equal to number of rows");
+        }
+
+        let mut out = Matrix::new_zero(m1.rows, m2.col);
+    
+        for i in 0..m1.rows {
+            for j in 0..m2.col {
+                for k in 0..m1.col {
+                    out[[i, j]] += m1[[i, k]] * m2[[k, j]];
+                }
+            }
+        }
+    
+        Ok(out)
+    }
 }
 
-impl<T: fmt::Display> fmt::Display for Matrix<T> {
+impl<T: fmt::Display + Default + num_traits::Num + ops::AddAssign + Copy> fmt::Display for Matrix<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut s = String::new();
         for i in 0..self.rows {
@@ -42,3 +77,17 @@ impl<T: fmt::Display> fmt::Display for Matrix<T> {
         write!(f, "{}", s)
     }
 }
+
+impl<T : Default> ops::Index<[usize; 2]> for Matrix<T> {
+    type Output = T;
+
+    fn index(&self, index : [usize; 2]) -> &Self::Output {
+        &self.data[index[0] * self.col + index[1]]
+    }
+}
+
+impl<T : Default> ops::IndexMut<[usize; 2]> for Matrix<T> {
+    fn index_mut(&mut self, index : [usize; 2]) -> &mut Self::Output {
+        & mut self.data[index[0] * self.col + index[1]]
+    }
+} 
