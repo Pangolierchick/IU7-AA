@@ -6,7 +6,7 @@ pub struct Matrix<T : Default> {
     pub data : Vec<T>
 }
 
-impl<T : Default + num_traits::Num + ops::AddAssign + Copy> Matrix<T> {
+impl<T : Default + num_traits::Num + ops::AddAssign + Copy + ops::SubAssign> Matrix<T> {
     pub fn new(r : usize, c : usize) -> Self {
         Self { rows : r, col : c, data: Vec::with_capacity(r * c) }
     }
@@ -58,9 +58,52 @@ impl<T : Default + num_traits::Num + ops::AddAssign + Copy> Matrix<T> {
     
         Ok(out)
     }
+
+    pub fn vinograd_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
+        if m1.col != m2.rows {
+            return Err("The number of columns must be equal to number of rows");
+        }
+
+        let mut out : Matrix<T> = Matrix::new_zero(m1.rows, m2.col);
+
+        let mut row_factor : Vec<T> = vec![Default::default(); m1.rows];
+        let mut col_factor : Vec<T> = vec![Default::default(); m2.col];
+
+        for i in 0..m1.rows {
+            for j in 0..m1.col / 2 {
+                row_factor[i] += m1[[i, j * 2]] * m1[[i, j * 2 + 1]]
+            }
+        }
+
+        for i in 0..m2.col {
+            for j in 0..m2.rows / 2 {
+                col_factor[i] += m2[[j * 2, i]] * m2[[j * 2 + 1, i]]
+            }
+        }
+
+        for i in 0..m1.rows {
+            for j in 0..m2.col {
+                out[[i, j]] -= row_factor[i] + col_factor[j];
+
+                for k in 0..m1.col / 2 {
+                    out[[i, j]] += (m1[[i, 2 * k + 1]] + m2[[2 * k, j]]) * (m1[[i, 2 * k]] + m2[[2 * k + 1, j]]);
+                }
+            }
+        }
+
+        if m1.col % 2 > 0{
+            for i in 0..m1.rows {
+                for j in 0..m2.col {
+                    out[[i, j]] += m1[[i, m1.col - 1]] * m2[[m1.col - 1, j]];
+                }
+            }
+        }
+
+        Ok(out)
+    }
 }
 
-impl<T: fmt::Display + Default + num_traits::Num + ops::AddAssign + Copy> fmt::Display for Matrix<T> {
+impl<T: fmt::Display + Default + num_traits::Num + ops::AddAssign + Copy + ops::SubAssign> fmt::Display for Matrix<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut s = String::new();
         for i in 0..self.rows {
