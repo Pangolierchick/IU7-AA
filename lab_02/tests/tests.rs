@@ -142,3 +142,165 @@ fn test_vinograd_opt_rnd() {
 
     assert_eq!(true, is_equal(&canon, &test));
 }
+
+#[test]
+fn test_default_3() {
+    let m1 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    let m2 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    match matrix::Matrix::default_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(3, 3, &[30, 36, 42, 66, 81, 96, 102, 126, 150]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_3() {
+    let m1 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    let m2 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    match matrix::Matrix::vinograd_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(3, 3, &[30, 36, 42, 66, 81, 96, 102, 126, 150]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_opt_3() {
+    let m1 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    let m2 = matrix::Matrix::from(3, 3, &[1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    match matrix::Matrix::vinograd_opt_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(3, 3, &[30, 36, 42, 66, 81, 96, 102, 126, 150]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_default_4() {
+    let m1 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+    let m2 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+
+    println!("{}\n{}", m1, m2);
+
+    match matrix::Matrix::default_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(2, 2, &[7, 10, 15, 22]);
+            println!("{}\n{}", v, true_res);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_4() {
+    let m1 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+    let m2 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+
+    match matrix::Matrix::vinograd_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(2, 2, &[7, 10, 15, 22]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_opt_4() {
+    let m1 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+    let m2 = matrix::Matrix::from(2, 2, &[1, 2, 3, 4]);
+
+    match matrix::Matrix::vinograd_opt_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(2, 2, &[7, 10, 15, 22]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_default_5() {
+    let m1 = matrix::Matrix::from(1, 1, &[8]);
+    let m2 = matrix::Matrix::from(1, 1, &[4]);
+
+    match matrix::Matrix::default_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(1, 1, &[32]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_5() {
+    let m1 = matrix::Matrix::from(1, 1, &[8]);
+    let m2 = matrix::Matrix::from(1, 1, &[4]);
+
+    match matrix::Matrix::vinograd_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(1, 1, &[32]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_vinograd_opt_5() {
+    let m1 = matrix::Matrix::from(1, 1, &[8]);
+    let m2 = matrix::Matrix::from(1, 1, &[4]);
+
+    match matrix::Matrix::vinograd_opt_mult(&m1, &m2) {
+        Err(e) => { println!("{}", e); assert_eq!(true, false);},
+        Ok(v) => {
+            let true_res = matrix::Matrix::from(1, 1, &[32]);
+            assert_eq!(true, is_equal(&v, &true_res));
+        }
+    }
+}
+
+#[test]
+fn test_default_6() {
+    let m1 = matrix::Matrix::from(1, 2, &[1, 2]);
+    let m2 = matrix::Matrix::from(1, 2, &[3, 4]);
+
+    match matrix::Matrix::default_mult(&m1, &m2) {
+        Err(e) => assert_eq!(true, true),
+        Ok(v) => assert_eq!(true, false)
+    }
+}
+
+#[test]
+fn test_vinograd_6() {
+    let m1 = matrix::Matrix::from(1, 2, &[1, 2]);
+    let m2 = matrix::Matrix::from(1, 2, &[3, 4]);
+
+    match matrix::Matrix::vinograd_mult(&m1, &m2) {
+        Err(e) => assert_eq!(true, true),
+        Ok(v) => assert_eq!(true, false)
+    }
+}
+
+#[test]
+fn test_vinograd_opt_6() {
+    let m1 = matrix::Matrix::from(1, 2, &[1, 2]);
+    let m2 = matrix::Matrix::from(1, 2, &[3, 4]);
+
+    match matrix::Matrix::vinograd_opt_mult(&m1, &m2) {
+        Err(e) => assert_eq!(true, true),
+        Ok(v) => assert_eq!(true, false)
+    }
+}
