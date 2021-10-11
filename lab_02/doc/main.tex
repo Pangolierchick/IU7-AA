@@ -300,7 +300,7 @@ pub fn default_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'s
 
 \begin{lstlisting}[caption=Алгоритм умножения матриц Винограда, label=list:vinograd, language={}]
 pub fn vinograd_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
-    if m1.rows != m2.rows || m1.col != m2.col {
+    if m1.rows != m1.col || m2.col != m2.rows || m1.col != m2.col {
         return Err("Matrices must be square and have equal size");
     }
 
@@ -345,7 +345,7 @@ pub fn vinograd_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'
 
 \begin{lstlisting}[caption=Оптимизированный алгоритм умножения матриц Винограда, label=list:vinograd, language={}]
 pub fn vinograd_opt_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
-    if m1.rows != m2.rows || m1.col != m2.col {
+    if m1.rows != m1.col || m2.col != m2.rows || m1.col != m2.col {
         return Err("Matrices must be square and have equal size");
     }
 
