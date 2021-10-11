@@ -60,8 +60,8 @@ impl<T : Default + num_traits::Num + ops::AddAssign + Copy + ops::Neg + ops::Sub
     }
 
     pub fn vinograd_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
-        if m1.col != m2.rows {
-            return Err("The number of columns must be equal to number of rows");
+        if m1.rows != m2.rows || m1.col != m2.col {
+            return Err("Matrices must be square and have equal size");
         }
 
         let mut out : Matrix<T> = Matrix::new_zero(m1.rows, m2.col);
@@ -103,8 +103,8 @@ impl<T : Default + num_traits::Num + ops::AddAssign + Copy + ops::Neg + ops::Sub
     }
 
     pub fn vinograd_opt_mult(m1 : & Matrix<T>, m2 : & Matrix<T>) -> Result<Matrix<T>, &'static str> {
-        if m1.col != m2.rows {
-            return Err("The number of columns must be equal to number of rows");
+        if m1.rows != m2.rows || m1.col != m2.col {
+            return Err("Matrices must be square and have equal size");
         }
 
         let mut out : Matrix<T> = Matrix::new_zero(m1.rows, m2.col);
