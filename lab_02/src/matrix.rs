@@ -68,7 +68,7 @@ impl<T : Default + num_traits::Num + ops::AddAssign + Copy + ops::Neg + ops::Sub
 
         let mut row_factor : Vec<T> = vec![Default::default(); m1.rows];
         let mut col_factor : Vec<T> = vec![Default::default(); m2.col];
-
+        
         for i in 0..m1.rows {
             for j in 0..m1.col / 2 {
                 row_factor[i] += m1[[i, j * 2]] * m1[[i, j * 2 + 1]]
@@ -91,7 +91,7 @@ impl<T : Default + num_traits::Num + ops::AddAssign + Copy + ops::Neg + ops::Sub
             }
         }
 
-        if m1.col % 2 > 0{
+        if m1.col % 2 > 0 {
             for i in 0..m1.rows {
                 for j in 0..m2.col {
                     out[[i, j]] += m1[[i, m1.col - 1]] * m2[[m1.col - 1, j]];
