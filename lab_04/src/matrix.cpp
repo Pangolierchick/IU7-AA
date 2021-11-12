@@ -3,8 +3,6 @@
 #include <thread>
 #include "matrix.h"
 
-#define DEBUG
-
 #ifdef DEBUG
 #include <cstdio>
 
@@ -41,7 +39,7 @@ static real row_mean(const real *ptr, size_t l) {
 // HACK WARNING: race conditions
 static void rows_worker(const Matrix &m, size_t rl, size_t rr, std::vector<real> &res) {
     for (size_t r = rl; r < rr; r++) {
-        res[r] = row_mean(m.data.data() + (r * m.cols), m.cols);
+        res[r] = row_mean(m.getdata().data() + (r * m.getcols()), m.getcols());
     }
 }
 // n 2
@@ -90,11 +88,11 @@ std::vector<real> Matrix::rows_mean_parallel(size_t t_num) {
 real row_mean(const Matrix &m, size_t r) {
     real acc = 0;
 
-    for (size_t c = 0; c < m.cols; c++) {
+    for (size_t c = 0; c < m.getcols(); c++) {
         acc += m(r, c);
     }
 
-    return acc / m.cols;
+    return acc / m.getcols();
 }
 
 std::vector<real> Matrix::rows_mean() {
@@ -106,4 +104,10 @@ std::vector<real> Matrix::rows_mean() {
     }
 
     return res;
+}
+
+void Matrix::fill_rand() {
+    for (size_t i = 0; i < data.size(); i++) {
+        data[i] = rand();
+    }
 }

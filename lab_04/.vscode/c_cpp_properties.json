@@ -13,7 +13,7 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",
-            "compileCommands": "/Users/kirill/Study/third_course/IU7-AA/lab_04/.vscode/c_cpp_properties.json"
+            "compileCommands": "/Users/kirill/Study/third_course/IU7-AA/lab_04/build/compile_commands.json"
         }
     ],
     "version": 4

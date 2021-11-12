@@ -4,8 +4,8 @@
 int main() {
     Matrix m(10, 10);
 
-    for (size_t i = 0; i < m.rows; i++) {
-        for (size_t j = 0; j < m.cols; j++) {
+    for (size_t i = 0; i < m.getrows(); i++) {
+        for (size_t j = 0; j < m.getcols(); j++) {
             m(i, j) = i + j;
         }
     }

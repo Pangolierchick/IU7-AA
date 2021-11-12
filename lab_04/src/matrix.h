@@ -12,11 +12,19 @@ public:
 
     void print(std::ostream &s = std::cout);
 
+    void fill_rand();
+
     std::vector<real> rows_mean_parallel(size_t threads=1);
     std::vector<real> rows_mean();
 
     inline real operator()(size_t r, size_t c) const { return data[r * cols + c]; }
     inline real& operator()(size_t r, size_t c) { return data[r * cols + c]; }
+
+    size_t getcols() const { return cols; }
+    size_t getrows() const { return rows; }
+    const std::vector<real>& getdata() const { return data; }
+
+private:
 
     std::vector<real> data;
     size_t rows;
