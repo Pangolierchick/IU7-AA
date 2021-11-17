@@ -2,6 +2,7 @@ mod distance;
 use std::io;
 
 fn main() -> io::Result<()> {
+    println!("============================ AA 1 ============================");
     let mut s1 = String::new();
     let mut s2 = String::new();
 
@@ -18,6 +19,8 @@ fn main() -> io::Result<()> {
     println!("Levenstein iter: {}", distance::levenstein_iter(s1, s2));
     println!("damerau-Levenstein rec: {}", distance::damerau_levenstein_rec(s1, s2));
     println!("damerau-Levenstein iter: {}", distance::damerau_levenstein_iter(s1, s2));
+
+    println!("==============================================================");
 
     Ok(())
 }
