@@ -1,0 +1,492 @@
+\input{style.tex}
+
+\title{Lab 02 report}
+\author{Kirill}
+
+\date{\today}
+
+\begin{document}
+\thispagestyle{empty}
+
+\noindent \begin{minipage}{0.15\textwidth}
+    \includegraphics[width=\linewidth]{b_logo}
+\end{minipage}
+\noindent\begin{minipage}{0.85\textwidth}\centering
+    \textbf{Министерство науки и высшего образования Российской Федерации}\\
+    \textbf{Федеральное государственное бюджетное образовательное учреждение высшего образования}\\
+    \textbf{«Московский государственный технический университет имени Н.Э.~Баумана}\\
+    \textbf{(национальный исследовательский университет)»}\\
+    \textbf{(МГТУ им. Н.Э.~Баумана)}
+\end{minipage}
+
+\noindent\rule{16cm}{3pt}
+\newline\newline
+\noindent ФАКУЛЬТЕТ $\underline{\text{«Информатика и системы управления»}}$ \newline\newline
+\noindent КАФЕДРА $\underline{\text{«Программное обеспечение ЭВМ и информационные технологии»}}$\newline
+
+
+\begin{center}
+    \noindent\begin{minipage}{1.3\textwidth}\centering
+    \Large\textbf{   ~~~ Лабораторная работа №5}\newline
+    \textbf{по дисциплине "Анализ Алгоритмов"}\newline\newline\newline
+    \end{minipage}
+\end{center}
+
+\noindent\textbf{Тема} $\underline{\text{Конвейерная обработка данных}}$\newline\newline
+\noindent\textbf{Студент} $\underline{\text{Рядинский К. В.}}$\newline\newline
+\noindent\textbf{Группа} $\underline{\text{ИУ7-53Б}}$\newline\newline
+\noindent\textbf{Преподаватель} $\underline{\text{Волкова Л. Л.}}$\newline
+
+\begin{center}
+    \mbox{}
+    \vfill
+    Москва
+\end{center}
+
+\begin{center}
+    \the\year ~г.
+\end{center}
+\clearpage
+
+\renewcommand\contentsname{\hfill{\normalfont{СОДЕРЖАНИЕ}}\hfill}  %Оглавление
+\tableofcontents
+\newpage
+
+\anonsection{Введение}
+
+Параллельные вычисления часто используются для увеличения скорости выполнения
+программ. Однако приемы, применяемые для однопоточных машин, для
+параллельных могут не подходить. Конвейерная обработка данных является
+популярным приемом при работе с параллельными машинами.
+
+Целью данной работы является изучение и реализация метода конвейерных вычислений.
+
+В рамках выполнения работы необходимо решить следующие задачи:
+
+\begin{enumerate}
+    \item изучения основ конвейерной обработки данных;
+    \item применение изученных основ для реализации конвейерной обработки данных;
+    \item получения практических навыков;
+    \item получение статистики выполнения программы;
+    \item описание и обоснование полученных результатов;
+    \item выбор и обоснование языка программирования, для решения данной задачи.
+\end{enumerate}
+
+\section{Аналитическая часть}
+Конвейер - способ организации вычислений, используемый в современных процессорах и контроллерах с целью повышения их производительности (увеличения числа инструкций, выполняемых в единицу времени — эксплуатация параллелизма на уровне инструкций), технология, используемая при разработке компьютеров и других цифровых электронных устройств. \\
+Конвейеризация (или конвейерная обработка) в общем случае основана на разделении подлежащей исполнению функции на более мелкие части, называемые ступенями, и выделении для каждой из них отдельного блока аппаратуры. Производительность при этом возрастает благодаря тому, что одновременно на различных ступенях конвейера выполняются несколько команд.\\
+
+Для данной работы был выбран алгоритм сборки компьютера, состоящий из трех этапов: установка материнской платы (м.п.), установка центрального процессора (цп), установка графического процессора (гп).
+
+\subsection{Оценка производительности идеального конвейера}
+
+Пусть задана операция, выполнение которой разбито на n последовательных этапов. При последовательном их выполнении операция выполняется за время
+
+\begin{equation}\label{form:way} 
+ \tau _{e}={\sum\limits_{i=1}^n \tau _{i}}
+ \end{equation}
+ \begin{align*}
+    \text{где} \\
+    n &- \text{количество последовательных этапов;} \\
+   \tau _{i} &- \text{время выполнения i-го этапа;}
+\end{align*}
+
+Быстродействие одного процессора, выполняющего только эту операцию, составит
+
+\begin{equation}\label{form:way} 
+ S_{e}={\frac{1}{\tau _{e}}}={\frac{1}{\sum\limits_{i=1}^n \tau _{i}}}
+ \end{equation}
+ \begin{align*}
+    \text{где} \\
+    \tau _{e} &- \text{время выполнения одной операции;} \\
+    n &- \text{количество последовательных этапов;} \\
+   \tau _{i} &- \text{время выполнения i-го этапа;}
+\end{align*}
+
+
+Максимальное быстродействие процессора при полной загрузке конвейера составляет
+
+
+
+Число n — количество уровней конвейера, или глубина перекрытия, так как каждый такт на конвейере параллельно выполняются n операций. Чем больше число уровней (станций), тем больший выигрыш в быстродействии может быть получен.
+
+Известна оценка
+\begin{equation}\label{form:way} 
+{\frac{n}{n/2} \leq {\frac{S_{max}}{S_{e}}} \leq n}
+ \end{equation}
+ \begin{align*}
+    \text{где} \\
+    S_{max} &- \text{максимальное быстродействие процессора  при полной загрузке конвейера;} \\
+    S_{e} &- \text{стандартное быстродействие процессора;} \\
+   n &- \text{количество этапов.}
+\end{align*}
+
+то есть выигрыш в быстродействии получается от $\frac{n}{2}$  до $n$ раз.
+
+Реальный выигрыш в быстродействии оказывается всегда меньше, чем указанный выше, поскольку:
+
+\begin{enumerate}
+\item[1)] некоторые операции, например, над целыми, могут выполняться за меньшее количество этапов, чем другие арифметические операции. Тогда отдельные станции конвейера будут простаивать;
+\item[2)] при выполнении некоторых операций на определённых этапах могут требоваться результаты более поздних, ещё не выполненных этапов предыдущих операций. Приходится приостанавливать конвейер;
+\item[3)] поток команд(первая ступень) порождает недостаточное количество операций для полной загрузки конвейера.
+\end{enumerate}
+
+
+\subsection{Вывод}
+
+В данном разделе были рассмотрены
+основополагающие материалы, которые в дальнейшем потребуются
+при реализации конвейера.
+
+\section{Конструкторская часть}
+
+В данном разделе будут рассмотрены схемы работы конвейеров, используемые типы данных и структура программного обеспечения.
+
+\subsection{Схемы алгоритмов}
+
+На схеме \ref{img:main} представлены этапы запуска конвейеров.
+На схеме \ref{img:worker} представлена работа одного из конвейеров.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{main.png}
+    \caption{Схема запуска конвейеров}
+    \label{img:main}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.95]{worker.png}
+    \caption{Схема работы одного конвейера}
+    \label{img:worker}
+\end{figure}
+
+\subsection{Описание используемых типов данных}
+
+При реализации алгоритмов будут использованы следующие структуры данных:
+
+\begin{enumerate}
+    \item Конвейер ~---~ очередь.
+    \item Время установки компонента ~---~ целочисленный тип long long.
+    \item Номер компьютера ~---~ целочисленный тип long long.
+\end{enumerate}
+
+\subsection{Структура программного обеспечения}
+
+Программное обеспечение состоит из следующих модулей:
+
+\begin{enumerate}
+    \item main.cpp ~---~ модуль, содержащий код точки входа.
+    \item queue.h  ~---~ модуль, содержащий код реализации очереди.
+    \item dns.cpp  ~---~ модуль, содержащий код конвейера.
+    \item computer.h ~---~ модуль, содержащий код класса компьютера.
+\end{enumerate}
+
+\subsection{Вывод}
+
+В данном разделе были рассмотрены схемы алгоритма, описаны используемые типы данных, структура программного обеспечения.
+
+\section{Технологическая часть}
+
+В данном разделе приведены средства реализации и листинги кода.
+
+\subsection{Средства реализации}
+
+К языку программирования выдвигаются следующие требования:
+
+\begin{enumerate}
+    \item Возможность порождать системные потоки.
+    \item Возможность производить замер времени выполнения части программы.
+    \item Существуют среды разработки для этого языка.
+\end{enumerate}
+
+По этим требованиям был выбран язык программирования C++.
+
+\subsection{Листинги кода}
+
+\begin{lstlisting}[caption=Реализация очереди, label=list:queue, language={}]
+#pragma once
+
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+
+template <class T>
+class SafeQueue
+{
+public:
+    SafeQueue(void) : q(), m(), c() {}
+    ~SafeQueue(void) {}
+
+    bool empty() const {
+        std::lock_guard<std::mutex> lock(m);
+        return q.empty();
+    }
+
+    size_t size() const {
+        std::lock_guard<std::mutex> lock(m);
+        return q.size();
+    }
+    
+
+    void enqueue(T t)
+    {
+        std::lock_guard<std::mutex> lock(m);
+        q.push(t);
+        c.notify_one();
+    }
+
+    T dequeue(void)
+    {
+        std::unique_lock<std::mutex> lock(m);
+        while (q.empty()) {
+            c.wait(lock);
+        }
+
+        T val = q.front();
+        q.pop();
+        return val;
+    }
+private:
+    std::queue<T> q;
+    mutable std::mutex m;
+    std::condition_variable c;
+};	
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Класс компьютера, label=list:computer, language={}]
+#pragma once
+
+#include <chrono>
+#include <thread>
+
+
+class Computer {
+public:
+    Computer() = default;
+
+    bool is_built() const { return mother_board && cpu && gpu; }
+    
+    bool mb_installed() const { return mother_board; }
+    bool cpu_installed() const { return cpu; }
+    bool gpu_installed() const { return gpu; }
+
+    void set_id(size_t i) { id = i; }
+    size_t get_id() const { return id; }
+
+    void install_mb()  { std::this_thread::sleep_for(mb_installation_time);  mother_board = true; }
+    void install_cpu() { std::this_thread::sleep_for(cpu_installation_time); cpu = true; }
+    void install_gpu() { std::this_thread::sleep_for(gpu_installation_time); gpu = true; }
+
+
+    long long mb_install_time_s;
+    long long mb_install_time_e;
+    long long cpu_install_time_s;
+    long long cpu_install_time_e;
+    long long gpu_install_time_s;
+    long long gpu_install_time_e;
+
+private:
+    bool mother_board;
+    bool cpu;
+    bool gpu;
+
+    size_t id;
+
+    const std::chrono::microseconds mb_installation_time  {1500};
+    const std::chrono::microseconds cpu_installation_time {1000};
+    const std::chrono::microseconds gpu_installation_time {1100};
+};
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Работа конвейеров, label=list:conveyor, language={}]
+void dns::run_parallel() {
+    std::vector<Computer> comps(ncomps);
+
+    for (size_t i = 1; i <= comps.size(); i++) {
+        comps[i - 1].set_id(i);
+    }
+
+    SafeQueue<Computer*> mb_man;
+    SafeQueue<Computer*> cpu_man;
+    SafeQueue<Computer*> gpu_man;
+
+    std::atomic_bool mb_done  = false;
+    std::atomic_bool cpu_done = false;
+
+    auto qs = std::chrono::high_resolution_clock::now();
+
+
+    auto mb_worker = [qs, &mb_done, &m = mb_man, &c = cpu_man]() {
+        while (!m.empty()) {
+            auto comp = m.dequeue();
+            auto s = std::chrono::high_resolution_clock::now();
+            comp->install_mb();
+            auto e = std::chrono::high_resolution_clock::now();
+
+            comp->mb_install_time_s = std::chrono::duration_cast<std::chrono::microseconds>(s - qs).count();
+            comp->mb_install_time_e = std::chrono::duration_cast<std::chrono::microseconds>(e - qs).count();
+
+            c.enqueue(comp);
+        }
+
+        mb_done = true;   
+    };
+
+    auto cpu_worker = [qs, &cpu_done, &mb_done, &c = cpu_man, &g = gpu_man]() {
+        while (1) {
+            if (!c.empty()) {
+                auto comp = c.dequeue();
+                auto s = std::chrono::high_resolution_clock::now();
+                comp->install_cpu();
+                auto e = std::chrono::high_resolution_clock::now();
+
+                comp->cpu_install_time_s = std::chrono::duration_cast<std::chrono::microseconds>(s - qs).count();
+                comp->cpu_install_time_e = std::chrono::duration_cast<std::chrono::microseconds>(e - qs).count();
+
+                g.enqueue(comp);
+            } else if (mb_done) {
+                break;
+            }
+        }
+
+        cpu_done = true;
+    };
+
+    auto gpu_worker = [qs, &cpu_done, &mb_done, &g = gpu_man]() {
+        while (1) {
+            if (!g.empty()) {
+                auto comp = g.dequeue();
+                auto s = std::chrono::high_resolution_clock::now();
+                comp->install_gpu();
+                auto e = std::chrono::high_resolution_clock::now();
+
+                comp->gpu_install_time_s = std::chrono::duration_cast<std::chrono::microseconds>(s - qs).count();
+                comp->gpu_install_time_e = std::chrono::duration_cast<std::chrono::microseconds>(e - qs).count();
+            } else if (cpu_done && mb_done){
+                break;
+            }
+        }
+    };
+
+
+    for (auto &&c : comps) {
+        mb_man.enqueue(&c);
+    }
+
+    qs = std::chrono::high_resolution_clock::now();
+
+    auto mb_t  = std::thread(mb_worker);
+    auto cpu_t = std::thread(cpu_worker);
+    auto gpu_t = std::thread(gpu_worker);
+
+
+    mb_t.join();
+    cpu_t.join();
+    gpu_t.join();
+
+    auto qe = std::chrono::high_resolution_clock::now();
+
+    std::cout << "End time: " << std::chrono::duration_cast<std::chrono::microseconds>(qe - qs).count() << "\n";
+
+    print_comps(comps);
+}
+\end{lstlisting}
+
+\subsection{Вывод}
+
+В данном разделе был разработан конвейер.
+
+\section {Исследовательский раздел}
+
+В данном разделе будет проведен замер временных характеристик выполнения алгоритмов и пример работы программы.
+
+\subsection{Пример работы программы}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{ex_run.png}
+    \caption{Пример работы программы}
+    \label{img:example_run}
+\end{figure}
+
+
+\subsection{Технические характеристики}
+
+Технические характеристики электронно-вычислительной машины, на которой выполнялось тестирование:
+
+\begin{itemize}
+    \item операционная система: macOS BigSur версия 11.4;
+    \item оперативная память: 8 гигабайт LPDDR4;
+    \item процессор: Apple M1.
+\end{itemize}
+
+\subsection{Время работы программы}
+
+В таблице \ref{tab:time} представлен лог работы программы. Лента 1 занимается установкой материнской платы, лента 2 --- установкой центрального процессора, лента 3 --- установка графического процессора. Время указано в микросекундах. \\
+
+\begin{table}[H]
+    \caption{\centering Лог работы программы}
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \multicolumn{1}{|l|}{Лента №} & \multicolumn{1}{l|}{Задача №} & \multicolumn{1}{l|}{Время начала} & \multicolumn{1}{l|}{Время конца} \\ \hline
+    1                             & 1                             & 40                                & 1951                             \\ \hline
+    2                             & 1                             & 1966                              & 3221                             \\ \hline
+    3                             & 1                             & 3227                              & 4403                             \\ \hline
+    1                             & 2                             & 1962                              & 3865                             \\ \hline
+    2                             & 2                             & 3876                              & 5132                             \\ \hline
+    3                             & 2                             & 5137                              & 6516                             \\ \hline
+    1                             & 3                             & 3873                              & 5781                             \\ \hline
+    2                             & 3                             & 5789                              & 7044                             \\ \hline
+    3                             & 3                             & 7059                              & 8439                             \\ \hline
+    1                             & 4                             & 5789                              & 7669                             \\ \hline
+    2                             & 4                             & 7672                              & 8927                             \\ \hline
+    3                             & 4                             & 8932                              & 10314                            \\ \hline
+    1                             & 5                             & 7671                              & 9554                             \\ \hline
+    2                             & 5                             & 9559                              & 10816                            \\ \hline
+    3                             & 5                             & 10817                             & 12200                            \\ \hline
+    \end{tabular}
+    \label{tab:time}
+\end{table}
+
+На рисунке \ref{img:plot} представлен график зависимости времени работы реализации конвейеров от количества задач для линейной и параллельной обработки конвейера.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{plot.png}
+    \caption{Зависимость времени работы реализации конвейеров от количества задач}
+    \label{img:plot}
+\end{figure}
+
+\subsection{Вывод}
+
+Параллельная реализация конвейерной обработки значительно выигрывает по времени относительно линейной реализации. Как видно из рисунка \ref{img:plot}, линейная реализация примерно в 2 раза медленнее параллельной при 500 задачах.
+
+
+\anonsection{Заключение}
+
+В результате выполнения лабораторной работы было экспериментально подтверждено различие временных характеристик последовательной и параллельной реализации конвейерной обработки данных.
+
+В рамках выполнения работы была достигнута цель и решены следующие задачи:
+
+\begin{enumerate}
+	\item изучили освоили конвейерную обработку данных;
+	\item применили изученные основы для реализации конвейерной обработки данных;
+	\item получили практические навыки;
+	\item получили статистику выполнения программы;
+	\item описали и обосновали полученные результаты;
+	\item выбрали и обосновали языка программирования, для решения данной задачи.
+\end{enumerate}
+
+\anonsection{Литература}
+
+\begin{enumerate}
+	\item Visual Studio Code [Электронный ресурс], режим доступа: https://code.visualstudio.com/ (дата обращения: \today)
+	\item LPDDR4 [Электронный ресурс] \url{https://ru.wikipedia.org/wiki/LPDDR#LPDDR4} (дата обращения: \today)
+	\item Ульянов М. В. Ресурсно-эффективные компьютерные алгоритмы. Разработка и Анализ. - Наука Физматлит, 2007. - 376.
+\end{enumerate}
+
+\end{document}
+
+\end{document}

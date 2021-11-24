@@ -8,14 +8,8 @@ template <class T>
 class SafeQueue
 {
 public:
-    SafeQueue(void)
-        : q(), m(), c()
-    {
-    }
-
-    ~SafeQueue(void)
-    {
-    }
+    SafeQueue(void) : q(), m(), c() {}
+    ~SafeQueue(void) {}
 
     bool empty() const {
         std::lock_guard<std::mutex> lock(m);
@@ -38,9 +32,7 @@ public:
     T dequeue(void)
     {
         std::unique_lock<std::mutex> lock(m);
-        while (q.empty())
-        {
-        //     // release lock as long as the wait and reaquire it afterwards.
+        while (q.empty()) {
             c.wait(lock);
         }
 
@@ -48,7 +40,6 @@ public:
         q.pop();
         return val;
     }
-
 private:
     std::queue<T> q;
     mutable std::mutex m;

@@ -97,44 +97,76 @@
 
 В данном разделе были рассмотрены алгоритм вычисления среднего арифметического строки матрицы и его параллельная реализиация.
 
-\section{Конструкторская часть.}
+\section{Конструкторская часть}
 
-В данном разделе будут представлены схемы алгоритмов (\ref{img:iter}-\ref{img:parallel}) и схемы вспомогательных функций (\ref{img:worker}-\ref{img:row_mean})).
+В данном разделе будут представлены схемы алгоритмов (\ref{img:iter}-\ref{img:parallel}) и схемы вспомогательных функций (\ref{img:worker}-\ref{img:row_mean})). Описаны используемые типы данных, структура программного обеспечения (далее ПО) и классы эквивалентности.
 
 \subsection{Схемы алгоритмов}
 
-\begin{figure}[hp]
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.8]{iter.png}
     \caption{Схема последовательного алгоритма}
     \label{img:iter}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.7]{parallel.png}
     \caption{Схема параллельного алгоритма}
     \label{img:parallel}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=1]{worker.png}
     \caption{Схема вспомогательной функции worker}
     \label{img:worker}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=1]{row_mean.png}
     \caption{Схема вспомогательной функции вычисления среднего арифметического строки}
     \label{img:row_mean}
 \end{figure}
 
-\clearpage
+
+\subsection{Описание используемых типов данных}
+
+При реализации алгоритмов будут использованы следующие структуры данных:
+
+\begin{enumerate}
+	\item Матрица --- одномерный массив типа float.
+	\item Количество строк матрицы --- целое число типа long long.
+	\item Количество столбцов матрицы --- целое число типа long long.
+	\item Результирующий вектор --- одномерный массив типа float.
+	\item Массив потоков --- одномерный массив типа std::thread.
+\end{enumerate}
+
+\subsection{Структура ПО}
+
+ПО будет состоять из следующих модулей:
+
+\begin{enumerate}
+	\item main.cpp --- модуль, содержащий точку входа программы.
+	\item matrix.cpp --- модуль, содержащий код алгоритмов нахождения среднего арифметического матрицы.
+\end{enumerate}
+
+\subsection{Способы тестирования и классы эквивалентности}
+
+При тестировании алгоритмов была выбрана методика тестирования черным ящиком. Были выделены следующие классы эквивалентности:
+
+\begin{enumerate}
+	\item Матрица, заполненная случайными положительными числами.
+	\item Матрица, заполненная построчно равными элементами.
+	\item Матрица, содержащая один элемент.
+	\item Пустая матрица.
+\end{enumerate}
+
 \subsection{Вывод}
 
-В данном разделе были рассмотрены схемы алгоритмов (\ref{img:iter}-\ref{img:parallel}) и схемы вспомогательных функций (\ref{img:worker}-\ref{img:row_mean})).
+В данном разделе были рассмотрены схемы алгоритмов (\ref{img:iter}-\ref{img:parallel}) и схемы вспомогательных функций (\ref{img:worker}-\ref{img:row_mean})). Описаны используемые типы данных, структура ПО, способы тестирования и классы эквивалентности.
 
 \section{Технологическая часть}
 
@@ -237,6 +269,7 @@ std::vector<real> Matrix::rows_mean_parallel(size_t t_num) {
 	\hline
 	Ввод                                                          & Фактический результат & Ожидаемый результат \\ \hline
 	1 2 3                                                         & 2                     & 2                   \\ \hline
+	()                                                            & ()                    & ()                  \\ \hline
 	0                                                             & 0                     & 0                   \\ \hline
 	\begin{tabular}[c]{@{}c@{}}1 1 1\\ 2 2 2\\ 1 2 1\end{tabular} & 1, 2, 1.333333        & 1, 2, 1.333333      \\ \hline
 	\end{tabular}
@@ -250,6 +283,15 @@ std::vector<real> Matrix::rows_mean_parallel(size_t t_num) {
 \section{Экспериментальная часть}
 
 В данном разделе будет произведено сравнение временных характеристик вышеизложенных алгоритмов.
+
+\subsection{Пример работы программы}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{example.png}
+    \caption{Пример работы программы}
+    \label{img:example}
+\end{figure}
 
 \subsection{Технические характеристики}
 
