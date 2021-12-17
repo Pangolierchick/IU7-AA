@@ -2,6 +2,8 @@ project('lab_06', ['cpp'], default_options: ['cpp_std=c++17'])
 
 i = include_directories('./src')
 
+subdir('benchmark')
+
 src = [
     './src/main.cpp',
     './src/ant.cpp',

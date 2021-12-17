@@ -20,26 +20,26 @@ public:
 
     Matrix<size_t> copy_map() { return map.clone(); }
 
-    double a() const { return _a; }
-    double b() const { return _b; }
-    double q() const { return _q; }
-    double p() const { return _p; }
+    float a() const { return _a; }
+    float b() const { return _b; }
+    float q() const { return _q; }
+    float p() const { return _p; }
 
     Matrix<size_t>& getmap() { return map; }
-    Matrix<double>& getph() { return ph; }
+    Matrix<float>& getph() { return ph; }
 
     std::vector<size_t> simulate(size_t days);
 
 private:
     Matrix<size_t> map;
-    Matrix<double> ph;
-    double _a;
-    double _b;
-    double _q;
-    double _p;
+    Matrix<float> ph;
+    float _a;
+    float _b;
+    float _q;
+    float _p;
 
-    constexpr static double default_a = 06.0;
-    constexpr static double default_b = 04.0;
-    constexpr static double default_q = 20.0;
-    constexpr static double default_p = 0.6;
+    constexpr static float default_a = 06.0;
+    constexpr static float default_b = 04.0;
+    constexpr static float default_q = 20.0;
+    constexpr static float default_p = 0.6;
 };

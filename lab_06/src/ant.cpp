@@ -24,23 +24,17 @@ void Ant::move() {
     }
 }
 
-std::vector<double> Ant::getprob() {
-    std::vector<double> prob;
-    double sum = 0;
-
-    // std::cout << "=================================\n";
-
-    // std::cout << "Position: " << pos << "\n";
-
-    // to_visit.print();
+std::vector<float> Ant::getprob() {
+    std::vector<float> prob;
+    float sum = 0;
 
     for (size_t i = 0; i < to_visit.getcols(); i++) {
         auto dist = to_visit(pos, i);
         if (dist > 0) {
-            double p1 = pow(1.0 / (double)dist, colony->a());
-            double p2 = pow(colony->getph()(pos, i), colony->b());
+            float p1 = pow(1.0 / (float)dist, colony->a());
+            float p2 = pow(colony->getph()(pos, i), colony->b());
 
-            double p_t = p1 * p2;
+            float p_t = p1 * p2;
             sum += p_t;
 
             prob.push_back(p_t);
@@ -71,13 +65,13 @@ size_t Ant::distance() {
 }
 
 void Ant::update_phero() {
-    double dt = 0;
+    float dt = 0;
 
     for (size_t i = 0; i < colony->getph().getrows(); i++) {
         for (size_t j = 0; j < colony->getph().getcols(); j++) {
             if (colony->getmap()(i, j) != 0) {
                 if (visited(i, j)) {
-                    dt = colony->q() / (double)colony->getmap()(i, j);
+                    dt = colony->q() / (float)colony->getmap()(i, j);
                 } else {
                     dt = 0;
                 }
@@ -104,15 +98,15 @@ void Ant::travel(size_t p) {
     pos = p;
 }
 
-size_t Ant::find_way(std::vector<double>& probs) {
+size_t Ant::find_way(std::vector<float>& probs) {
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_real_distribution<> dist(0.0, 1.0);
 
-    double sum = std::accumulate(probs.begin(), probs.end(), 0.0);
+    float sum = std::accumulate(probs.begin(), probs.end(), 0.0);
 
-    double p = dist(rng);
-    double pn = p * sum;
+    float p = dist(rng);
+    float pn = p * sum;
 
     sum = 0;
 

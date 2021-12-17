@@ -24,8 +24,8 @@ private:
     size_t start;
     std::shared_ptr<Colony> colony;
 
-    std::vector<double> getprob();
-    size_t find_way(std::vector<double>& probs);
+    std::vector<float> getprob();
+    size_t find_way(std::vector<float>& probs);
 
     void step_back();
 };

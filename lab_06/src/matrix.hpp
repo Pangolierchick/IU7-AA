@@ -6,7 +6,7 @@
 
 template <typename T>
 void Matrix<T>::print(std::ostream& s) {
-    s << rows << " " << cols << "\n";
+    s << rows << " " << cols << "\n\n";
 
     for (size_t i = 0; i < rows; i++) {
         for (size_t j = 0; j < cols; j++) {

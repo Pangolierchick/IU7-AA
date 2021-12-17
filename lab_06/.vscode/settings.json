@@ -73,6 +73,7 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "set": "cpp"
     }
 }

@@ -5,6 +5,10 @@ int main() {
     std::cout << "============================ AA 4 ============================\n";
     Matrix m(10, 10);
 
+    size_t size = 0;
+    std::cout << "Input size of matrix: ";
+    std::cin >> size;
+
     for (size_t i = 0; i < m.getrows(); i++) {
         for (size_t j = 0; j < m.getcols(); j++) {
             m(i, j) = i + j;
@@ -13,7 +17,7 @@ int main() {
 
     m.print();
 
-    auto v_p = m.rows_mean_parallel(6);
+    auto v_p = m.rows_mean_parallel(4);
     auto v_i = m.rows_mean();
 
     std::cout << "Mean parallel: ";

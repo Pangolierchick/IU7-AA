@@ -1,47 +1,33 @@
 #include "default.h"
 #include <algorithm>
-#include <iterator>
 #include <iostream>
+#include <iterator>
 
-using matrix_t = std::vector<std::vector<size_t>>;
+std::vector<size_t> default_salesman(Matrix<size_t> graph) {
+    std::vector<size_t> res(graph.getcols());
+    for (size_t s = 0; s < graph.getcols(); s++) {
+        std::vector<size_t> vertex;
+        for (size_t i = 0; i < graph.getcols(); i++)
+            if (i != s)
+                vertex.push_back(i);
 
-static void routes(size_t pos, const Matrix<size_t> &map, std::vector<size_t> &path, matrix_t &m) {
-    path.push_back(pos);
+        size_t min_path = std::string::npos;
+        do {
+            size_t current_pathweight = 0;
 
-    if (path.size() < map.getcols()) {
-        for (size_t i = 0; i < map.getcols(); i++) {
-            if (std::find(path.begin(), path.end(), i) == path.end()) {
-                routes(i, map, path, m);
+            size_t k = s;
+            for (size_t i = 0; i < vertex.size(); i++) {
+                current_pathweight += graph(k, vertex[i]);
+                k = vertex[i];
             }
-        }
-    } else {
-        m.push_back(path);
-    }
-}
+            current_pathweight += graph(k, s);
 
+            min_path = std::min(min_path, current_pathweight);
 
-std::vector<size_t> default_salesman(const Matrix<size_t> &map) {
-    std::vector<size_t> res(map.getcols());
-    std::vector<size_t> path;
-
-    for (size_t i = 0; i < map.getcols(); i++) {
-        size_t sum = std::string::npos;
-        size_t cur = 0;
-        matrix_t rts;
-
-        routes(i, map, path, rts);
-
-        for (size_t j = 0; j < rts.size(); j++) {
-            cur = 0;
-
-            for (size_t k = 0; k < rts[j].size() - 1; k++) {
-                cur += map(rts[j][k], rts[j][k + 1]);
-            }
-
-            sum = std::min(sum, cur);
-        }
-
-        res[i] = sum;
+        } while (
+            std::next_permutation(vertex.begin(), vertex.end()));
+        
+        res[s] = min_path;
     }
 
     return res;

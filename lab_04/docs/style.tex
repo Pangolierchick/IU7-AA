@@ -235,7 +235,17 @@
         \tabtitalign{#3}}                                       % Наименование таблицы строкой ниже
     \captionsetup[table]{labelsep=space}                        % пробельный разделитель идентификатора с номером от наименования
 }
-\captionsetup[table]{format=tablecaption,singlelinecheck=off,font=onehalfspacing,position=top,skip=-5pt}  % многострочные наименования и прочее
+
+\DeclareCaptionFormat{listings}{%
+%\setlength{\fboxsep}{0pt}%
+\parbox[top][0pt][l]{\textwidth}{\hspace{0pt}#1#2#3}}
+
+\captionsetup[lstlisting]{justification=raggedright, singlelinecheck=off}
+
+\captionsetup[table]{format=tablecaption,singlelinecheck=off,font=onehalfspacing,position=top,skip=-5pt, justification=raggedright}
+
+\captionsetup[tabular]{format=tablecaption,singlelinecheck=off,font=onehalfspacing,position=top,skip=-5pt, justification=raggedright}
+
 \DeclareCaptionLabelFormat{continued}{Продолжение таблицы~#2}
 \setlength{\belowcaptionskip}{.2cm}
 \setlength{\intextsep}{0ex}
@@ -415,7 +425,7 @@
   showtabs=false,                  % show tabs within strings adding particular underscores
   stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
   stringstyle=\color{mymauve},     % string literal style
-  tabsize=8,                       % sets default tabsize to 8 spaces
+  tabsize=4,                       % sets default tabsize to 8 spaces
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 \newcommand{\anonsection}[1]{\cleardoublepage
